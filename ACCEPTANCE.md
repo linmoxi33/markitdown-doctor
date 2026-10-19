@@ -72,10 +72,37 @@
 - `ruff check src tests`：**All checks passed**
 - 覆盖：格式矩阵、预检六种状态、异常翻译、批量计划与冲突命名、CLI 退出码、真实子进程端到端
 
-## 七、遗留与已知限制
+## 七、发布后验证（v0.1.0）
+
+仓库：https://github.com/linmoxi33/markitdown-doctor
+Release：https://github.com/linmoxi33/markitdown-doctor/releases/tag/v0.1.0
+
+| 验证项 | 方法 | 结果 |
+|---|---|---|
+| 远端文件完整 | `git/trees?recursive=1` 逐个比对 | 22 文件，大小与本地一致 |
+| wheel 未损坏 | raw 下载后 `sha256sum` 比对 | 一致 |
+| Release 资产 | 从 release 下载后 `sha256sum` | 一致（`9bb5f833…`） |
+| wheel 可安装 | 全新 venv 装 Release 产物 | `mdc 0.1.0` 正常 |
+| 安装后可用 | 跑 doctor / check / 批量 | 与本地行为完全一致 |
+| `git+https` 安装 | `pip install "markitdown-doctor @ git+https://…"` | 成功，命令可用 |
+| 跨平台 | GitHub Actions 9 组合 | **全部 success** |
+| 许可证识别 | `gh api repos/… --jq .license.spdx_id` | `MIT` |
+
+### CI 矩阵（全部通过）
+
+`ubuntu-latest` / `macos-latest` / `windows-latest` × Python `3.10` / `3.12` / `3.13`
+
+这一步顺带证明了**跨平台可移植**：之前在本地只能验 Windows，现在 Linux 与 macOS 的 61 个测试（含逐字节兼容断言）也全过。
+
+### 发布过程中修掉的两个问题
+
+1. **LICENSE 被判成 `NOASSERTION`**——因为把上游 MIT 全文混排进了 LICENSE。改成纯本项目 MIT，上游条款移到 `NOTICE`，GitHub 立刻识别为 `MIT`。
+2. **wheel 需重建**——LICENSE 改动后旧 wheel 里仍带着混排文本，重建并替换 Release 资产后哈希更新。
+
+## 八、遗留与已知限制
 
 1. 格式矩阵钉在 MarkItDown 0.1.8；上游新增转换器需同步 `formats.py`。
 2. 乱码检测是启发式（控制字符密度），已用 9 类样本验证但非形式化证明。
 3. `--json` 结构稳定但未做版本号。
-4. 未在 macOS / Linux 实机跑过；代码只用 `pathlib` 与 `shutil.which`，理论可移植。
-5. 未发布到 PyPI（名称 `markitdown-doctor` 在 PyPI 上 404，可用）。
+4. **未发布到 PyPI**——README 已写明从 git 或 Release 安装；PyPI 名 `markitdown-doctor` 仍空着。
+5. 社交预览图需在仓库 Settings 手动上传 `assets/cover.png`（API 不支持设置 og:image）。
