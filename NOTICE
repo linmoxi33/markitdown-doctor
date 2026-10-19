@@ -1,0 +1,29 @@
+# NOTICE
+
+markitdown-doctor is a wrapper around MarkItDown. It does not modify, vendor
+or redistribute MarkItDown source code; it depends on the published package.
+
+## Upstream
+
+MarkItDown
+https://github.com/microsoft/markitdown
+
+Copyright (c) Microsoft Corporation.
+Licensed under the MIT License.
+
+The format capability matrix in `src/markitdown_doctor/formats.py` was derived
+by reading MarkItDown 0.1.8's converter modules and by running the real
+converters in a clean virtual environment. It mirrors upstream's converter
+registry; when upstream adds or changes converters, that file needs updating.
+
+## Third-party tools referenced in messages
+
+The CLI prints install hints for optional external binaries. It does not bundle
+or redistribute them.
+
+- ExifTool — https://exiftool.org — Phil Harvey, Artistic License / GPL
+- FFmpeg — https://ffmpeg.org — LGPL/GPL depending on build
+
+## This project
+
+Copyright (c) 2026 Vespera. Licensed under the MIT License; see `LICENSE`.
