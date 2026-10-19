@@ -1,5 +1,9 @@
 # markitdown-doctor
 
+[![tests](https://github.com/linmoxi33/markitdown-doctor/actions/workflows/tests.yml/badge.svg)](https://github.com/linmoxi33/markitdown-doctor/actions/workflows/tests.yml)
+[![release](https://img.shields.io/github/v/release/linmoxi33/markitdown-doctor)](https://github.com/linmoxi33/markitdown-doctor/releases)
+[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 ![markitdown-doctor](assets/cover.png)
 
 **MarkItDown works. Getting it to work is the hard part.**
@@ -145,6 +149,14 @@ If you already know you want everything:
 ```bash
 pip install 'markitdown-doctor[all]'
 ```
+
+Not on PyPI yet. Install straight from the repository instead:
+
+```bash
+pip install "markitdown-doctor @ git+https://github.com/linmoxi33/markitdown-doctor"
+```
+
+Or grab the wheel from the [latest release](https://github.com/linmoxi33/markitdown-doctor/releases/latest).
 
 ## First five minutes
 
