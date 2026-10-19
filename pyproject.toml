@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "markitdown-doctor"
+dynamic = ["version"]
+description = "Preflight diagnosis, batch conversion and readable failures for MarkItDown"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Vespera" }]
+keywords = ["markitdown", "markdown", "cli", "diagnostics", "batch"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Topic :: Utilities",
+]
+dependencies = ["markitdown>=0.1.8"]
+
+[project.optional-dependencies]
+# Convenience: `pip install 'markitdown-doctor[all]'` pulls every MarkItDown extra
+all = ["markitdown[all]"]
+test = ["pytest>=7"]
+
+[project.scripts]
+mdc = "markitdown_doctor.cli:main"
+markitdown-doctor = "markitdown_doctor.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/linmoxi33/markitdown-doctor"
+Issues = "https://github.com/linmoxi33/markitdown-doctor/issues"
+
+[tool.setuptools.dynamic]
+version = { attr = "markitdown_doctor.__about__.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# The CLI's own error handler must catch Exception: its entire job is to turn
+# an arbitrary third-party failure into one readable line. Letting anything
+# escape would defeat the point of the tool.
+"src/markitdown_doctor/cli.py" = ["BLE001"]
+# diagnose_environment() probes importlib.metadata, which raises different
+# exception types across Python versions; a blind except is the honest way to
+# say "we could not determine the version".
+"src/markitdown_doctor/preflight.py" = ["BLE001"]
+# Adjacent string literals keep the user-facing message source readable.
+"src/markitdown_doctor/formats.py" = ["ISC004"]
+# Tests import modules inside functions on purpose: they patch module state
+# after import, and several probe optional dependencies at call time.
+# They also embed raw OOXML fixtures, whose lines cannot be wrapped.
+"tests/*" = ["PLC0415", "E501"]
+
